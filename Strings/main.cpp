@@ -13,6 +13,13 @@ char* shrink(char str[]);
 bool is_palindrom(const char str[]);
 char* remove_symbol(char str[], char symbol);
 bool is_int_number(const char str[]);
+int to_int_number(char* str);
+
+bool is_bin_number(const char str[]);
+int bin_to_dec(const char str[]);
+
+bool is_hex_number(const char str[]);
+int hex_to_dec(const char str[]);
 
 void main()
 {
@@ -37,6 +44,11 @@ void main()
 	//cout << shrink(str) << endl;
 	cout << "строка " << (is_palindrom(str) ? "" : "НЕ") << " является палиндромом" << endl;
 	cout << "строка " << (is_int_number(str) ? "" : "НЕ") << " является целым числом" << endl;
+	if(is_int_number(str)) cout << "возвращаемое значение целого числа: " << to_int_number(str) << endl;
+	cout << "строка" << (is_bin_number(str) ? "" : " НЕ") << " является двоичным числом" << endl;
+	if (is_bin_number(str))	cout << str << "(bin) = " << bin_to_dec(str) << "(dec);\n";
+	cout << "строка" << (is_hex_number(str) ? "" : " НЕ") << " является шестнадцатеричным числом" << endl;
+	if (is_hex_number(str))	cout << str << "(hex) = " << hex_to_dec(str) << "(dec);\n";
 
 }
 int StringLenght(char str[])
@@ -101,7 +113,7 @@ bool is_palindrom(const char str[])
 
 	remove_symbol(buffer, ' ');
 	n = strlen(buffer);
-	for (int i = 0; i < n/2; i++)
+	for (int i = 0; i < n / 2; i++)
 	{
 		if (buffer[i] != buffer[n - i - 1])
 		{
@@ -120,4 +132,56 @@ bool is_int_number(const char str[])
 
 	}
 	return true;
+}
+int to_int_number(char* str)
+{
+	int integer = 0;
+	for (int i = 0; str[i] != '\0'; i++)
+	{
+		integer = integer * 10 + (str[i] - '0');
+	}
+	return integer;
+}
+bool is_bin_number(const char str[])
+{
+	for (int i = 0; str[i] != '\0'; i++)
+	{
+		if (str[i] != '0' && str[i] != '1') return false;
+	}
+	return true;
+}
+int bin_to_dec(const char str[])
+{
+	int n = strlen(str);
+	int decimal = 0;
+	int weight = 1;
+	for (int i = n - 1; i >= 0; i--)
+	{
+		decimal += (str[i] - 48) * weight;
+		weight *= 2;
+	}
+	return decimal;
+}
+bool is_hex_number(const char str[])
+{
+	for (int i = 0; str[i] != '\0'; i++)
+	{
+		if (!((str[i] >= 'A' && str[i] <= 'F') || (str[i] >= '0' && str[i] <= '9'))) return false;
+	}
+	return true;
+}
+int hex_to_dec(const char str[])
+{
+	int n = strlen(str);
+	int decimal = 0;
+	int weight = 1;
+	for (int i = n - 1; i >= 0; i--)
+	{
+		int hex = 0;
+		if (str[i] >= '0' && str[i] <= '9') hex = (int)str[i] - 48;
+		if (str[i] >= 'A' && str[i] <= 'F') hex = (int)str[i] - 55;
+		decimal += hex * weight;
+		weight *= 16;
+	}
+	return decimal;
 }
